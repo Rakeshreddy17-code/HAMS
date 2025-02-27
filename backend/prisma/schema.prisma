@@ -1,0 +1,25 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"  
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String @id @default(uuid())
+  name     String
+  email    String @unique
+  password String
+  appointments Appointment[] // One-to-Many relation with Appointment
+}
+
+model Appointment {
+  id          String   @id @default(uuid())
+  date        DateTime
+  time        String
+  description String
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade) // Foreign key relation
+}
